@@ -24,7 +24,8 @@ export const toDoListReducer = (state, action) => {
 			);
 		case 'FILTER_COMPLETED':
 			return state.filter((item) => !item.completed);
-
+		case 'REMOVE_ITEM':
+			return state.filter((item) => item.id !== action.id);
 		default:
 			return state;
 	}

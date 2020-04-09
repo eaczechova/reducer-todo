@@ -1,5 +1,8 @@
 import React, { useState, useReducer } from 'react';
 import { toDoListReducer, initialToDoListState } from './reducers/toDoReducer';
+import ToDoForm from './components/ToDoForm';
+import ItemsList from './components/ItemsList';
+import ClearCompleted from './components/ClearCompleted';
 
 const ToDoList = () => {
 	const [toDoListState, dispatch] = useReducer(
@@ -25,39 +28,25 @@ const ToDoList = () => {
 		dispatch({ type: 'HANDLE_SUBMIT', payload: toDoItem.title });
 		setToDoItem({ title: '' });
 	};
-	console.log(toDoListState);
-	console.log(initialToDoListState);
+
+	const removerItem = (id) => {
+		dispatch({ type: 'REMOVE_ITEM', id: id });
+	};
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit}>
-				<input
-					onChange={handleChanges}
-					type="text"
-					name="toDoItem"
-					value={toDoItem.title}
-				/>
-				<button>Add</button>
-			</form>
-
-			<button onClick={() => dispatch({ type: 'FILTER_COMPLETED' })}>
-				Clear Completed
-			</button>
-
-			<ul>
-				{toDoListState.map((item) => {
-					return (
-						<li className={`task${item.completed ? ' completed' : ''}`}>
-							<span onClick={() => toggleComplet(item.id)}>-</span>
-							{item.title}
-						</li>
-					);
-				})}
-				{/* ) : (
-					<p>List is empty</p>
-				)} */}
-			</ul>
-		</div>
+		<main>
+			<ToDoForm
+				handleSubmit={handleSubmit}
+				handleChanges={handleChanges}
+				toDoItem={toDoItem}
+			/>
+			<ItemsList
+				toggleComplet={toggleComplet}
+				toDoListState={toDoListState}
+				removerItem={removerItem}
+			/>
+			<ClearCompleted dispatch={dispatch} />
+		</main>
 	);
 };
 
